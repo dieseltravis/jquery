@@ -27,7 +27,8 @@ var jQuery = function( selector, context ) {
 	rnotwhite = /\S/,
 
 	// Used for trimming whitespace
-	rtrim = /^(\s|\u00A0)+|(\s|\u00A0)+$/g,
+	rtrimleft = /^[\s\xA0]+/,
+	rtrimright = /[\s\xA0]+$/,
 
 	// Match a standalone tag
 	rsingleTag = /^<(\w+)\s*\/?>(?:<\/\1>)?$/,
@@ -559,8 +560,10 @@ jQuery.extend({
 		return object;
 	},
 
-	trim: function( text ) {
-		return (text || "").replace( rtrim, "" );
+	trim: typeof "".trim === "function" ? function( text ) {
+		return ! text ? "" : text.trim();
+	} : function ( text ) {
+		return ! text ? "" : text.replace( rtrimleft, "" ).replace( rtrimright, "" );
 	},
 
 	// results is for internal usage only
